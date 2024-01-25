@@ -1,6 +1,7 @@
 # Database Component
 class DatabaseComponent:
     def check_column_status(self):
+        pass
         # Connect to the database and query for rows with column value 0
         # Publish the rows to the ZeroMQ queue
 
@@ -13,12 +14,15 @@ class NotificationComponent:
 # Queue Component
 class QueueComponent:
     def __init__(self):
+        pass
         # Set up ZeroMQ PUB-SUB sockets
 
     def publish_task(self, task):
-        # Publish task to the ZeroMQ queue
+      pass
+      # Publish task to the ZeroMQ queue
 
     def subscribe_to_tasks(self, callback):
+        pass
         # Subscribe to the ZeroMQ queue and execute the callback function on received tasks
 
 # Main Controller/Coordinator
@@ -37,4 +41,5 @@ def main():
             queue_component.publish_task(task)
 
 if __name__ == "__main__":
-    main()
+    pass
+    # main()
