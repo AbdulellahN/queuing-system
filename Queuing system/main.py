@@ -1,100 +1,82 @@
-import smtplib
-from datetime import datetime
 import mysql.connector
+import zmq
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from jinja2 import Environment, FileSystemLoader
 
-class DatabaseComponent:
-    def check_column_status(self):
-        db_config = {
-            'host': 'localhost',
-            'user': 'root',
-            'password': 'Q@5mk8wK',
-            'database': 'dba',
-            'port': 3307
-        }
+host = "localhost"
+user = "root"
+password = "Q@5mk8wK"
+database = "dba"
+port = 3307
 
-        try:
-            # Attempt to connect to the MySQL server
-            connection = mysql.connector.connect(**db_config)
-            cursor = connection.cursor()
+email_host = "smtp-mail.outlook.com"
+email_port = 587
+email_user = "abdulellah.n16@outlook.com"
+email_password = "Q@5mk8wk"
+email_from = "abdulellah.n16@outlook.com"
 
-            # Check if the connection is successful
-            if connection.is_connected():
-                print("Connected to the MySQL database")
+template_dir = ""
 
-                current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                select_query = """
-                    SELECT * FROM Users
-                    WHERE expiry_date < %s
-                """
-                cursor.execute(select_query, (current_date,))
-                valid_licenses = cursor.fetchall()
-                return valid_licenses
+context = zmq.Context()
+socket = context.socket(zmq.PUB)
+socket.bind("tcp://127.0.0.1:5555")  # Bind to localhost on port 5555
 
-            # Perform your database operations here
+try:
+    connection = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password,
+        database=database,
+        port=port
+    )
 
-        except mysql.connector.Error as err:
-            # Handle any connection errors
-            print(f"Error: {err}")
+    if connection.is_connected():
+        print("Connected to the database")
 
+        # Fetch licenses that will expire in 2 weeks or less
+        cursor = connection.cursor()
+        query = "SELECT C_email, idclients, Expiry_date FROM clients WHERE Expiry_date <= (NOW() + INTERVAL 2 WEEK)"
+        cursor.execute(query)
+        results = cursor.fetchall()
 
-class NotificationComponent:
-    def __init__(self, email_config):
-        self.email_config = email_config
-        self.server = None
+        for C_email, idclients, expiry_date in results:
+            # Load Jinja2 template
+            env = Environment(loader=FileSystemLoader(template_dir))
+            template = env.get_template("email_template.html")
 
-    def connect_to_email_server(self):
-        try:
-            # Establish a connection to the email server
-            self.server = smtplib.SMTP(self.email_config['smtp_server'], self.email_config['smtp_port'])
-            self.server.starttls()  # Use TLS (Transport Layer Security) for secure communication
-            self.server.login(self.email_config['username'], self.email_config['password'])
-            print("Connected to the email server")
-        except Exception as e:
-            print(f"Error connecting to the email server: {e}")
+            # Render the template with client details
+            email_body = template.render(idclients=idclients, expiry_date=expiry_date)
 
-    def send_email_notification(self, task):
-        # Implement your email notification logic using the task data
-        pass
+            # Create the MIME object
+            message = MIMEMultipart()
+            message['From'] = email_from
+            message['To'] = C_email
+            message['Subject'] = "License Renewal Reminder"
+            message.attach(MIMEText(email_body, 'html'))
 
-    def close_connection(self):
-        if self.server:
-            self.server.quit()
-            print("Connection to the email server closed")
+            # Connect to the SMTP server and send the email
+            with smtplib.SMTP(email_host, email_port) as server:
+                server.starttls()
+                server.login(email_user, email_password)
+                server.sendmail(email_from, C_email, message.as_string())
 
+            # Send a message via ZeroMQ
+            zmq_message = f"License {idclients} will expire on {expiry_date}. Email notification sent to {C_email}"
+            socket.send_string(zmq_message)
+            print(f"Sent message: {zmq_message}")
 
-class QueueComponent:
-    def __init__(self):
-        pass
-        # Set up ZeroMQ PUB-SUB sockets
+except mysql.connector.Error as err:
+    print(f"MySQL Error: {err}")
 
-    def publish_task(self, task):
-        pass
-        # Publish task to the ZeroMQ queue
+except smtplib.SMTPException as smtp_err:
+    print(f"SMTP Error: {smtp_err}")
 
-    def subscribe_to_tasks(self, callback):
-        pass
-        # Subscribe to the ZeroMQ queue and execute the callback function on received tasks
+finally:
+    if 'connection' in locals() and connection.is_connected():
+        connection.close()
+        print("Connection closed")
 
-
-def main():
-    database_component = DatabaseComponent()
-    notification_config = {
-        'smtp_server': 'your_smtp_server',
-        'smtp_port': 587,  # Adjust the port as needed
-        'username': 'your_email@example.com',
-        'password': 'your_email_password'
-    }
-    notification_component = NotificationComponent(notification_config)
-    queue_component = QueueComponent()
-
-    # Subscribe notification component to the queue
-    queue_component.subscribe_to_tasks(notification_component.send_email_notification)
-
-    # Check the database for tasks and publish them to the queue
-    while True:
-        tasks = database_component.check_column_status()
-        for task in tasks:
-            queue_component.publish_task(task)
-
-if __name__ == "__main__":
-    main()
+socket.close()
+context.term()
