@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Email Template</title>
+</head>
+<body>
+    <h1>Edit Email Template</h1>
+    <form method="post" action="/edit_template">
+        <textarea name="new_template" rows="10" cols="50">{{ current_template }}</textarea>
+        <br>
+        <input type="submit" value="Save Template">
+    </form>
+</body>
+</html>

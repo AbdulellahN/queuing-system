@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emails Sent to Clients</title>
+</head>
+<body>
+    <h1>Emails Sent to Clients</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>License Number</th>
+                <th>License Type</th>
+                <th>Email</th>
+                <th>Expires At</th>
+                <th>Status</th>
+                <th>Sent At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for email in emails %}
+            <tr>
+                <td>{{ email[0] }}</td>
+                <td>{{ email[1] }}</td>
+                <td>{{ email[2] }}</td>
+                <td>{{ email[3] }}</td>
+                <td>{{ email[4] }}</td>
+                <td>{{ email[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
