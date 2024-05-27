@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template Management System</title>
+</head>
+<body>
+    <h1>Template Management System</h1>
+    <form method="post" action="{{ url_for('edit_template') }}">
+        <label for="language">Select Language:</label>
+        <select id="language" name="language">
+            {% for language in session['template_paths'].keys() %}
+            <option value="{{ language }}">{{ language }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="template_id">Select Template:</label>
+        <select id="template_id" name="template_id">
+            <option value="">-- Select Template --</option>
+        </select>
+        <br><br>
+        <input type="submit" value="Edit Template">
+    </form>
+</body>
+</html>
+
+<script>
+    // Update template dropdown based on selected language
+    document.getElementById('language').addEventListener('change', function () {
+        var language = this.value;
+        var templateDropdown = document.getElementById('template_id');
+        templateDropdown.innerHTML = '';
+        var templates = {{ session['template_paths'] | tojson }};
+        var templatePaths = templates[language];
+        for (var key in templatePaths) {
+            var option = document.createElement('option');
+            option.value = key;
+            option.text = key;
+            templateDropdown.add(option);
+        }
+    });
+</script>

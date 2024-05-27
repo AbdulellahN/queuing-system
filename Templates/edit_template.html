@@ -1,14 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Email Template</title>
-</head>
-<body>
-    <h1>Edit Email Template</h1>
-    <form method="post" action="/edit_template">
-        <textarea name="new_template" rows="10" cols="50">{{ current_template }}</textarea>
-        <br>
-        <input type="submit" value="Save Template">
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Template</h1>
+
+<form method="post" action="{{ url_for('edit_email_template_route') }}">
+  <input type="hidden" name="language" value="{{ language }}">
+  <input type="hidden" name="template_id" value="{{ template_id }}">
+
+  <div>
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" value="{{ placeholders.title }}">
+  </div>
+
+  <div>
+    <label for="content">Content:</label>
+    <textarea id="content" name="content">{{ placeholders.paragraph }}</textarea>
+  </div>
+
+  <div>
+    <label for="footer">Footer:</label>
+    <input type="text" id="footer" name="footer" value="{{ placeholders.footer }}">
+  </div>
+
+  <button type="submit">Save Template</button>
+  <button type="button" onclick="updateTemplate()">Update</button>
+</form>
+{% endblock %}

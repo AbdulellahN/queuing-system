@@ -200,7 +200,7 @@ def consume_messages():
     channel.start_consuming()
 
 
-schedule.every().tuesday.at("11:13").do(consume_messages)
+consume_messages()
 
 while True:
     schedule.run_pending()

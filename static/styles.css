@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #8917b6;
+    margin: 0;
+    padding: 0;
+}
+
+.custom-list {
+    list-style-type: square; /* Set list item style to square */
+    padding-left: 20px; /* Add padding for indentation */
+}
+
+.custom-list li {
+    margin-bottom: 10px; /* Add space between list items */
+}
+
+.custom-list a {
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Set link color */
+    display: block; /* Make links block-level for full clickable area */
+    padding: 5px; /* Add padding around links */
+}
+
+.custom-list a:hover {
+    text-decoration: underline; /* Underline links on hover */
+    color: #007bff; /* Change link color on hover */
+    background-color: #f0f0f0; /* Add background color on hover */
+}

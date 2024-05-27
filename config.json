@@ -1,0 +1,62 @@
+{
+  "template_paths": {
+    "en": {
+      "1": {
+        "file_path": "Templates/email_temp.html",
+        "placeholders": {
+          "subject": "",
+          "title": "GOOD MORNING ",
+          "paragraph": "FUCK YOU SIR",
+          "footer": "From GAMR"
+        }
+      },
+      "2": {
+        "file_path": "Templates/s_temp.html",
+        "placeholders": {
+          "subject": "",
+          "title": "WELCOME",
+          "paragraph": "HOW YA'LL DOING",
+          "footer": "PLANET EARTH"
+        }
+      },
+      "3": {
+        "file_path": "Templates/t_temp.html",
+        "placeholders": {
+          "subject": "",
+          "title": "HI THERE",
+          "paragraph": "JUST NORMAL TESTING NOTHING SERIOUS, CHILL",
+          "footer": "PLANET EARTH"
+        }
+      }
+    },
+    "ar": {
+      "4": {
+        "file_path": "Templates/email_temp_AR.html",
+        "placeholders": {
+          "subject": "",
+          "title": "",
+          "paragraph": "",
+          "footer": ""
+        }
+      },
+      "5": {
+        "file_path": "Templates/s_temp_AR.html",
+        "placeholders": {
+          "subject": "",
+          "title": "",
+          "paragraph": "",
+          "footer": ""
+        }
+      },
+      "6": {
+        "file_path": "Templates/t_temp_AR.html",
+        "placeholders": {
+          "subject": "",
+          "title": "",
+          "paragraph": "",
+          "footer": ""
+        }
+      }
+    }
+  }
+}

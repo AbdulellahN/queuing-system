@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- Link to locally downloaded Bootstrap CSS file -->
+    <link href="file:///C:/Users/ACER/Desktop/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Welcome to the Dashboard</h1>
-    <ul>
-        <li><a href="/emails">View Sent Emails</a></li>
-        <li><a href="/edit_template">Edit Email Template</a></li>
-        <li><a href="/change_schedule">Change Schedule</a></li>
-    </ul>
+
+<h1>Welcome to the Dashboard</h1>
+
+<ul class="list-group">
+    <li class="list-group-item"><a href="/emails" class="text-decoration-none">View Sent Emails</a></li>
+    <li class="list-group-item"><a href="/edit_template" class="text-decoration-none">Edit Email Template</a></li>
+    <li class="list-group-item"><a href="/change_schedule" class="text-decoration-none">Change Schedule</a></li>
+</ul>
+
+<!-- Link to locally downloaded Bootstrap JS files (optional) -->
+<script src="file:///C:/Users/ACER/Desktop/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

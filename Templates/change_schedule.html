@@ -1,14 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Schedule</title>
 </head>
 <body>
     <h1>Change Schedule</h1>
-    <form method="post" action="/change_schedule">
-        <input type="text" name="new_schedule" placeholder="New Schedule (e.g., 'every tuesday at 12:00')">
-        <br>
-        <input type="submit" value="Change Schedule">
+
+    <form method="POST" action="/change_schedule">
+        <table>
+            <thead>
+                <tr>
+                    <th>Interval ID</th>
+                    <th>Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for interval_id, days in rows %}
+                <tr>
+                    <td>{{ interval_id }}</td>
+                    <td>
+                        <input type="number" name="days" value="{{ days }}" min="1" max="31">
+                        <input type="hidden" name="interval_id" value="{{ interval_id }}">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit">Save Changes</button>
     </form>
 </body>
 </html>
